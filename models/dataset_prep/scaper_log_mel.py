@@ -3,11 +3,12 @@ import glob
 from pathlib import Path
 import torch
 
+
 def tensorStacker(feature_dir):
-    #Creating a list of tensors to stack them up
+    # Creating a list of tensors to stack them up
     tensors = []
 
-    for log_mel_tensor in feature_dir.glob('*.pt'):
+    for log_mel_tensor in feature_dir.glob("*.pt"):
         tensor_data = torch.load(log_mel_tensor)
         tensors.append(tensor_data)
 

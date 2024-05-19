@@ -7,8 +7,10 @@ from torch.utils.data import DataLoader, TensorDataset
 
 
 import sys
-sys.path.append('/work/aistwal/MMDS_MasterThesis/models/dataset_prep')
+
+sys.path.append("/work/aistwal/MMDS_MasterThesis/models/dataset_prep")
 from scaper_log_mel import tensorStacker
+
 
 class ConvAutoencoder(nn.Module):
     def __init__(self):
@@ -17,19 +19,25 @@ class ConvAutoencoder(nn.Module):
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 16, kernel_size=3, stride=2, padding=1),
             nn.LeakyReLU(),
-            nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),  #[50, 32, 10, 376]
+            nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),  # [50, 32, 10, 376]
             nn.LeakyReLU(),
-            nn.Conv2d(32, 5, kernel_size=3, stride=2, padding=1),  #[50, 5, 5, 188]
-            nn.LeakyReLU()
+            nn.Conv2d(32, 5, kernel_size=3, stride=2, padding=1),  # [50, 5, 5, 188]
+            nn.LeakyReLU(),
         )
         # Decoder layers
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 32, kernel_size=3, stride=2, padding=1, output_padding = (1,1)),
+            nn.ConvTranspose2d(
+                5, 32, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+            ),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(32, 16, kernel_size=3, stride=2, padding=1, output_padding = (1,0)),
+            nn.ConvTranspose2d(
+                32, 16, kernel_size=3, stride=2, padding=1, output_padding=(1, 0)
+            ),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1, output_padding = (1,0)),
-            nn.LeakyReLU()
+            nn.ConvTranspose2d(
+                16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 0)
+            ),
+            nn.LeakyReLU(),
         )
 
     def forward(self, x):
@@ -55,22 +63,26 @@ def main():
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    #Prepare and Fetch training data
-    feature_dir = Path('/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features/features')
+    # Prepare and Fetch training data
+    feature_dir = Path(
+        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features/features"
+    )
 
-    x_train =  tensorStacker(feature_dir).to(device)
+    x_train = tensorStacker(feature_dir).to(device)
     y_train = x_train.clone().to(device)
 
     # Creating datasets and dataloaders
     train_dataset = TensorDataset(x_train, y_train)
-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+    train_loader = DataLoader(
+        dataset=train_dataset, batch_size=batch_size, shuffle=True
+    )
 
     writer = SummaryWriter()
 
     for epoch in range(num_epochs):
         for data in train_loader:
             inputs, labels = data
-            
+
             # Forward pass
             encoder_output, decoder_output = model(inputs)
             # print(encoder_output.size())
@@ -82,13 +94,18 @@ def main():
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}') #TODO Add loss to another log directory
+
+        print(
+            f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}"
+        )  # TODO Add loss to another log directory
 
     # Save the model
-    torch.save(model.state_dict(), f'/work/aistwal/MMDS_MasterThesis/models/checkpoints/low_conv_autoencoder_3_{num_epochs}_{batch_size}.pth')
+    torch.save(
+        model.state_dict(),
+        f"/work/aistwal/MMDS_MasterThesis/models/checkpoints/low_conv_autoencoder_3_{num_epochs}_{batch_size}.pth",
+    )
     writer.flush()
-    print(f'Model saved to low_conv_autoencoder_3_epoch_{num_epochs}_{batch_size}.pth')
+    print(f"Model saved to low_conv_autoencoder_3_epoch_{num_epochs}_{batch_size}.pth")
 
 
 if __name__ == "__main__":

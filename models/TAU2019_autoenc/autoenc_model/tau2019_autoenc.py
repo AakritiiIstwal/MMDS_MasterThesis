@@ -7,14 +7,19 @@ from pathlib import Path
 from torch.utils.data import DataLoader, TensorDataset
 from argparse import ArgumentParser
 
+
 def tensorStacker(feature_dir):
-    #Creating a list of tensors to stack them up
+    # Creating a list of tensors to stack them up
     tensors = []
 
-    for log_mel_tensor in feature_dir.glob('*.pt'):
+    for log_mel_tensor in feature_dir.glob("*.pt"):
         tensor_data = torch.load(log_mel_tensor)
-        mean, std, var = torch.mean(tensor_data), torch.std(tensor_data), torch.var(tensor_data) 
-        tensor_data  = (tensor_data-mean)/std 
+        mean, std, var = (
+            torch.mean(tensor_data),
+            torch.std(tensor_data),
+            torch.var(tensor_data),
+        )
+        tensor_data = (tensor_data - mean) / std
         tensors.append(tensor_data)
 
     if tensors:
@@ -25,7 +30,8 @@ def tensorStacker(feature_dir):
     else:
         print("No tensors found.")
         return torch.empty((0, 0))
-    
+
+
 # class ConvAutoencoder(nn.Module):
 #     def __init__(self):
 #         super(ConvAutoencoder, self).__init__()
@@ -53,6 +59,7 @@ def tensorStacker(feature_dir):
 #         decoder_x = self.decoder(encoder_x)
 #         return (encoder_x, decoder_x)
 
+
 class ConvAutoencoder(nn.Module):
     def __init__(self):
         super(ConvAutoencoder, self).__init__()
@@ -65,19 +72,27 @@ class ConvAutoencoder(nn.Module):
             nn.Conv2d(32, 100, kernel_size=3, stride=2, padding=1),
             nn.LeakyReLU(),
             nn.Conv2d(100, 10, kernel_size=3, stride=2, padding=1),
-            nn.LeakyReLU()
-            )
+            nn.LeakyReLU(),
+        )
         # Decoder layers
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(10, 100, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),
+            nn.ConvTranspose2d(
+                10, 100, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+            ),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(100, 32, kernel_size=3, stride=2, padding=1 , output_padding=(1, 1)),
+            nn.ConvTranspose2d(
+                100, 32, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+            ),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(32, 16,kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),
+            nn.ConvTranspose2d(
+                32, 16, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+            ),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),
-            nn.LeakyReLU()
-            )
+            nn.ConvTranspose2d(
+                16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+            ),
+            nn.LeakyReLU(),
+        )
 
     def forward(self, x):
         encoder_x = self.encoder(x)
@@ -88,18 +103,8 @@ class ConvAutoencoder(nn.Module):
 def main():
 
     parser = ArgumentParser()
-    parser.add_argument(
-        '--batch_size',
-        default=20, 
-        type=int,
-        help = 'Batch size'
-    )
-    parser.add_argument(
-        '--epochs',
-        default=200,
-        type=int,
-        help='Epochs'
-    )
+    parser.add_argument("--batch_size", default=20, type=int, help="Batch size")
+    parser.add_argument("--epochs", default=200, type=int, help="Epochs")
     args = parser.parse_args()
     # Hyperparameters
     batch_size = args.batch_size
@@ -115,24 +120,32 @@ def main():
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    #Prepare and Fetch training data
-    feature_path = '/work/aistwal/MMDS_MasterThesis/data/tau2019/train_log_mel_features/features'
-    print("Feature directory exists: " , os.path.isdir(feature_path))
+    # Prepare and Fetch training data
+    feature_path = (
+        "/work/aistwal/MMDS_MasterThesis/data/tau2019/train_log_mel_features/features"
+    )
+    print("Feature directory exists: ", os.path.isdir(feature_path))
     feature_dir = Path(feature_path)
 
-    x_train =  tensorStacker(feature_dir).to(device)
-    y_train = x_train.clone().to(device)  # For autoencoders, input and output are the same
+    x_train = tensorStacker(feature_dir).to(device)
+    y_train = x_train.clone().to(
+        device
+    )  # For autoencoders, input and output are the same
 
     # Creating datasets and dataloaders
     train_dataset = TensorDataset(x_train, y_train)
-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+    train_loader = DataLoader(
+        dataset=train_dataset, batch_size=batch_size, shuffle=True
+    )
 
     writer = SummaryWriter()
 
     for epoch in range(num_epochs):
         for data in train_loader:
             inputs, labels = data
-            inputs = inputs.unsqueeze(1)  # Adds a channel dimension (1) after the batch dimension
+            inputs = inputs.unsqueeze(
+                1
+            )  # Adds a channel dimension (1) after the batch dimension
             # This was needed since the dimensions of inputs for tau2019 was 50*640*64 but the model needs 50*1*640*64
             labels = labels.unsqueeze(1)
 
@@ -145,14 +158,19 @@ def main():
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        #check for val loss
-        
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}') #TODO Add loss to another log directory
+        # check for val loss
+
+        print(
+            f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}"
+        )  # TODO Add loss to another log directory
 
     # Save the model
-    torch.save(model.state_dict(), f'/work/aistwal/MMDS_MasterThesis/models/checkpoints/tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth')
+    torch.save(
+        model.state_dict(),
+        f"/work/aistwal/MMDS_MasterThesis/models/checkpoints/tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth",
+    )
     writer.flush()
-    print(f'Model saved to tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth')
+    print(f"Model saved to tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth")
 
 
 if __name__ == "__main__":
