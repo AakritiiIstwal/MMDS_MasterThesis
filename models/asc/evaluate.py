@@ -1,14 +1,13 @@
 import pandas as pd
-from dataloader import AudioDataset
-from collections import Counter
 import torch
-from torch.utils.data import DataLoader
-from scene_cls_model import Cnn_9layers_AvgPooling
 import numpy as np
-from tqdm import tqdm
+from collections import Counter
+from scene_cls_model import Cnn_9layers_AvgPooling
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import librosa
+from tqdm import tqdm
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print("Using device: ", device)
@@ -18,6 +17,7 @@ def predict(model, inputs):
         inputs = inputs.to(device)
         outputs = model(inputs)
         _, predicted = torch.max(outputs, 1)
+
     return predicted
 
 def main():
@@ -31,16 +31,12 @@ def main():
     idx_to_lb = {idx: lb for idx, lb in enumerate(labels)}
     
     audio_path_root = "/work/aistwal/dataset_tau2019/extracted-files/TAU-urban-acoustic-scenes-2019-development/"
-    audio_files = eval_df["filename"].map(lambda x: audio_path_root + x).tolist()
+    eval_df['filepath'] = eval_df["filename"].map(lambda x: audio_path_root + x)
+    audio_files = eval_df['filepath'].tolist()
     scene_labels = eval_df["scene_label"].map(lb_to_idx).tolist()
 
     label_counts = Counter(scene_labels)
     print(f"Label distribution: {label_counts}")
-
-    dataset = AudioDataset(audio_files, scene_labels)
-    data_loader = DataLoader(dataset, batch_size=16, shuffle=False)
-
-    print("Evaluation Data Size: ", len(data_loader))
 
     # Instantiate and load the model
     model = Cnn_9layers_AvgPooling(classes_num=10, activation="logsoftmax")
@@ -54,12 +50,26 @@ def main():
     all_targets = []
     filenames = []
 
-    for inputs, targets in tqdm(data_loader):
-        preds = predict(model, inputs)
-        predictions.extend(preds.cpu().numpy())
-        all_targets.extend(targets.cpu().numpy())
-        filenames.extend([dataset.audio_files[i] for i in range(len(inputs))])
+    for audio, label in tqdm(zip(audio_files, scene_labels), total=len(audio_files)):
+        # Load the audio file
+        y, sr = librosa.load(audio, sr=32000)
         
+        # Convert to log mel-spectrogram
+        mel_spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=1024, hop_length=500, n_mels=64)
+        log_mel_spectrogram = librosa.power_to_db(mel_spectrogram)
+        
+        # Normalize the spectrogram
+        log_mel_spectrogram = (log_mel_spectrogram - log_mel_spectrogram.mean()) / log_mel_spectrogram.std()
+        
+        # Convert to torch tensor
+        log_mel_spectrogram = torch.tensor(log_mel_spectrogram, dtype=torch.float32).unsqueeze(0) # gives torch.Size([1, 64, 641])
+
+        # Perform prediction
+        preds = predict(model, log_mel_spectrogram)
+        predictions.extend(preds.cpu().numpy())
+        all_targets.append(label)
+        filenames.append(audio)
+
     # Convert indices to labels
     predicted_labels = [idx_to_lb[pred] for pred in predictions]
     actual_labels = [idx_to_lb[target] for target in all_targets]
@@ -84,7 +94,7 @@ def main():
     cm = confusion_matrix(all_targets, predictions)
 
     # Plot and save the confusion matrix
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(12, 8))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=labels, yticklabels=labels)
     plt.ylabel('Actual')
     plt.xlabel('Predicted')
