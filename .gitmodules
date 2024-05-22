@@ -1,3 +1,0 @@
-[submodule "panns_inference"]
-	path = panns_inference
-	url = https://github.com/qiuqiangkong/panns_inference.git
