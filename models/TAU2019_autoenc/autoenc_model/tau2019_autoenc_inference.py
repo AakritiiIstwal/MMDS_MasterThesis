@@ -9,6 +9,13 @@ import librosa
 from argparse import ArgumentParser
 import matplotlib.pyplot as plt
 
+'''
+CUDA_VISIBLE_DEVICES=3 python /work/aistwal/MMDS_MasterThesis/models/TAU2019_autoenc/autoenc_model/tau2019_autoenc_inference.py  \
+                    /work/aistwal/MMDS_MasterThesis/models/checkpoints/tau_2019_conv_autoencoder_50_10.pth \
+                    /work/aistwal/MMDS_MasterThesis/data/tau2019/train_log_mel_features/features \
+                    /work/aistwal/MMDS_MasterThesis/data/tau2019/train_log_mel_features/encoded_log_mel_features/features \
+                    /work/aistwal/MMDS_MasterThesis/data/tau2019/train_log_mel_features/decoded_log_mel_features/features \
+'''
 
 def extract_label(audio_filename):
     class_label = audio_filename.split("-")[0]
@@ -50,6 +57,7 @@ def main():
 
     encoder_outputs = []
     labels = []
+    audio_name = []
 
     for file in tqdm(train_dir.glob("*.pt")):
         try:
@@ -69,6 +77,7 @@ def main():
             # Update Lists
             flattened_tensor = torch.flatten(encoder_output.cpu())
 
+            audio_name.append(file)
             encoder_outputs.append(flattened_tensor.numpy())
             labels.append(audio_scene_label)
 
@@ -76,7 +85,7 @@ def main():
             print(f"Error processing file {file}: {e}")
 
     # Create DataFrame
-    encoder_df = pd.DataFrame({"Label": labels, "Encoder Output": encoder_outputs})
+    encoder_df = pd.DataFrame({"Audio_Name": audio_name, "Label": labels, "Encoder Output": encoder_outputs})
 
     return encoder_df
 
@@ -91,6 +100,6 @@ if __name__ == "__main__":
 
     # READ PICKLE FILE
     unpickled_encoder_df = pd.read_pickle(
-        save_dir_path + "/tau_2019_conv_autoencoder_200_25.pkl"
+        save_dir_path + "/tau_2019_conv_autoencoder_50_10.pkl"
     )
     print(unpickled_encoder_df.shape)

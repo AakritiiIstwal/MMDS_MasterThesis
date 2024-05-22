@@ -87,3 +87,5 @@
 2024-05-20 21:33:05,281 - INFO - 	Validation Loss: 6.6503, Validation Accuracy: 85.25%
 2024-05-20 21:33:05,338 - INFO - Model saved to tau_2019_conv_new_10_16.pth
 2024-05-20 21:33:05,339 - INFO - Training complete
+2024-05-21 14:17:23,954 - ERROR - No such comm target registered: jupyter.widget.control
+2024-05-21 14:17:23,967 - WARNING - No such comm: 336ebf4c-086e-4f8c-b3c5-80c6baa25067
