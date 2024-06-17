@@ -1,6 +1,6 @@
 import torch
 from pathlib import Path
-from autoencoder_scaper import *
+from MMDS_MasterThesis.models.autoenc.autoencoder_scaper import *
 import re
 import pandas as pd
 from tqdm import tqdm

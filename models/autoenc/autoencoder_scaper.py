@@ -2,14 +2,23 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
-
 import sys
 
-sys.path.insert(0, "MasterThesis/models/dataset_prep")
+sys.path.insert(1, "/work/aistwal/MMDS_MasterThesis/models/dataset_prep")
 
 from torch.utils.data import DataLoader, TensorDataset
-from dataset_prep.scaper_log_mel import *
+from scaper_log_mel import *
+# from dataset_prep.scaper_log_mel import *
 
+import logging
+from tqdm import tqdm
+
+log_path = '/work/aistwal/MMDS_MasterThesis/models/autoenc/logs/'
+
+# Configure logging
+logging.basicConfig(filename=log_path+'training_log.log', level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
 
 class ConvAutoencoder(nn.Module):
     def __init__(self):
@@ -51,11 +60,12 @@ class ConvAutoencoder(nn.Module):
 
 
 def main():
-
+    logger.info("Training logs for autoencoder on scapper dataset")
     # Hyperparameters
     batch_size = 50
     num_epochs = 150
     learning_rate = 1e-3
+    logger.info(f"Batch Size:{batch_size}\n Epochs:{num_epochs}")
 
     # Initialize the model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -67,7 +77,7 @@ def main():
 
     # Prepare and Fetch training data
     feature_dir = Path(
-        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features/features"
+        "/work/aistwal/MMDS_MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features/features"
     )
 
     x_train = tensorStacker(feature_dir).to(device)
@@ -84,7 +94,7 @@ def main():
     writer = SummaryWriter()
 
     # Training the model with 30 batches in each epoch
-    for epoch in range(num_epochs):
+    for epoch in tqdm(range(num_epochs)):
         for data in train_loader:
             inputs, labels = data
 
@@ -98,17 +108,17 @@ def main():
             optimizer.step()
         # check for val loss
 
-        print(
+        logger.info(
             f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}"
-        )  # todo Add loss to another log directory
+        )
 
     # Save the model
     torch.save(
         model.state_dict(),
-        f"/work/aistwal/MasterThesis/models/checkpoints/conv_autoencoder_{num_epochs}_{batch_size}.pth",
+        f"/work/aistwal/MMDS_MasterThesis/models/checkpoints/conv_autoencoder_{num_epochs}_{batch_size}.pth",
     )
     writer.flush()
-    print(f"Model saved to conv_autoencoder_epoch_{num_epochs}_{batch_size}.pth")
+    logger.info(f"Model saved to conv_autoencoder_epoch_{num_epochs}_{batch_size}.pth")
 
 
 if __name__ == "__main__":
