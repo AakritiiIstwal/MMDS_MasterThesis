@@ -2,5 +2,24 @@
 *.pkl
 **/*.pkl
 
+#Ignore checkpoint files
+.ipynb_checkpoints
+
 #Ignore data folder
 data/
+
+#Ignore word vectors
+models/asc/wordvectors/
+
+#Ignore checkpoints
+models/checkpoints/
+
+#Ignore runs
+runs/
+
+#Ignore pictures
+ models/asc/files/
+
+#Ignore large file
+models/TAU2019_autoenc/autoenc_model/tau2019_events_panns_tSNE_plotting_.ipynb
+models/TAU2019_autoenc/autoenc_model/tau2019_kmeans_clustering.ipynb
