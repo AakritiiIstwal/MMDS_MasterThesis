@@ -53,8 +53,8 @@ class ConvBlock(nn.Module):
 
     def forward(self, input, pool_size=(2, 2), pool_type="avg"):
         x = input
-        x = F.relu_(self.bn1(self.conv1(x)))
-        x = F.relu_(self.bn2(self.conv2(x)))
+        x = F.relu(self.bn1(self.conv1(x))) #changed from F.relu_ which is the inplace version of F.relu
+        x = F.relu(self.bn2(self.conv2(x)))
         if pool_type == "max":
             x = F.max_pool2d(x, kernel_size=pool_size)
         elif pool_type == "avg":

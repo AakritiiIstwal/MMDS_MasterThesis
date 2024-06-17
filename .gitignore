@@ -18,7 +18,7 @@ models/checkpoints/
 runs/
 
 #Ignore pictures
- models/asc/files/
+models/asc/files/
 
 #Ignore large file
 models/TAU2019_autoenc/autoenc_model/tau2019_events_panns_tSNE_plotting_.ipynb

@@ -89,3 +89,19 @@
 2024-05-20 21:33:05,339 - INFO - Training complete
 2024-05-21 14:17:23,954 - ERROR - No such comm target registered: jupyter.widget.control
 2024-05-21 14:17:23,967 - WARNING - No such comm: 336ebf4c-086e-4f8c-b3c5-80c6baa25067
+2024-05-24 12:28:43,359 - ERROR - No such comm target registered: jupyter.widget.control
+2024-05-24 12:28:43,365 - WARNING - No such comm: b1370271-2cc5-4e8b-8637-509b5179579c
+2024-05-24 14:36:34,240 - ERROR - No such comm target registered: jupyter.widget.control
+2024-05-24 14:36:34,241 - WARNING - No such comm: cd5138c8-0d04-41b0-9029-f786439b4387
+2024-05-24 20:14:33,221 - ERROR - No such comm target registered: jupyter.widget.control
+2024-05-24 20:14:33,228 - WARNING - No such comm: fe154cc2-eeeb-4afb-952d-3b95606c7a4a
+2024-05-24 20:20:52,792 - ERROR - No such comm target registered: jupyter.widget.control
+2024-05-24 20:20:52,794 - WARNING - No such comm: f7170c36-b1e1-468f-88aa-526ea685573b
+2024-05-25 18:10:49,157 - ERROR - No such comm target registered: jupyter.widget.control
+2024-05-25 18:10:49,160 - WARNING - No such comm: 4f2d832e-87d7-45d9-bec8-4e35d27235ed
+2024-06-03 16:16:17,667 - ERROR - No such comm target registered: jupyter.widget.control
+2024-06-03 16:16:17,669 - WARNING - No such comm: 02bad01f-b6d1-475a-bd20-4c15be762843
+2024-06-03 21:04:43,051 - ERROR - No such comm target registered: jupyter.widget.control
+2024-06-03 21:04:43,052 - WARNING - No such comm: 070a52a8-49b5-409e-8848-1d72c21eb6ac
+2024-06-13 13:44:08,436 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-06-13 13:44:08,439 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
