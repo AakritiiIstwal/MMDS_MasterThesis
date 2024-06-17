@@ -1,6 +1,6 @@
 import librosa
 import panns_inference
-from panns_inference import AudioTagging, SoundEventDetection, labels
+from panns_inference import AudioTagging, labels
 import numpy as np
 import os
 from pathlib import Path
@@ -27,8 +27,6 @@ def save_audio_tagging_result(clipwise_output, audio_dict, fieldnames):
 
     # Print audio tagging top probabilities
     for k in range(10):
-        # print('{}: {:.3f}'.format(np.array(labels)[sorted_indexes[k]],
-        #     clipwise_output[sorted_indexes[k]]))
         event_prob_tuple = (
             np.array(labels)[sorted_indexes[k]],
             "{:.3f}".format(clipwise_output[sorted_indexes[k]]),
