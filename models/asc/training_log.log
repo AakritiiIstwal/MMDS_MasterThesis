@@ -105,3 +105,4 @@
 2024-06-03 21:04:43,052 - WARNING - No such comm: 070a52a8-49b5-409e-8848-1d72c21eb6ac
 2024-06-13 13:44:08,436 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
 2024-06-13 13:44:08,439 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-07-06 12:59:57,666 - WARNING - Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
