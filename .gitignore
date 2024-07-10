@@ -17,6 +17,7 @@ models/asc/wordvectors/
 
 #Ignore checkpoints
 models/checkpoints/
+models/asc/largemodel_checkpoint/
 
 #Ignore runs
 runs/
