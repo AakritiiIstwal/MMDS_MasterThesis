@@ -3,11 +3,12 @@
 **/*.pkl
 
 #Ignore checkpoint files
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
 #Ignore .csv
-.csv
-.log
+*.csv
+*.log
+*.png
 
 #Ignore data folder
 data/
