@@ -65,8 +65,8 @@ def save_features(directory, save_dir):
 
 def main():
     audio_process_count = save_features(
-        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train",
-        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features",
+        "/work/aistwal/backup/MMDS_MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train",
+        "/work/aistwal/backup/MMDS_MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features",
     )
     print("Total audio processed: ", audio_process_count)
 

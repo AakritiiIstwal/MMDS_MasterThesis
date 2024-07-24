@@ -25,13 +25,13 @@ def main():
     model.to(device)
 
     train_dir = Path(
-        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features/features"
+        "/work/aistwal/backup/MMDS_MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/train_log_mel_features/features"
     )
     encoded_feature_dir = Path(
-        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/encoded_log_mel_features/features"
+        "/work/aistwal/backup/MMDS_MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/encoded_log_mel_features/features"
     )
     decoded_feature_dir = Path(
-        "/work/aistwal/MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/decoded_log_mel_features/features"
+        "/work/aistwal/backup/MMDS_MasterThesis/data/jointSoundScene_data/syntheticSoundscenes/decoded_log_mel_features/features"
     )
 
     encoder_outputs = []
