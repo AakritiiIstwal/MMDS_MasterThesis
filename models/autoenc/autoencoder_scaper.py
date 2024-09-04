@@ -115,7 +115,7 @@ def main():
     # Save the model
     torch.save(
         model.state_dict(),
-        f"/work/aistwal/MMDS_MasterThesis/models/checkpoints/conv_autoencoder_{num_epochs}_{batch_size}.pth",
+        f"/work/aistwal/backup/MMDS_MasterThesis/models/checkpoints/conv_autoencoder_{num_epochs}_{batch_size}.pth",
     )
     writer.flush()
     logger.info(f"Model saved to conv_autoencoder_epoch_{num_epochs}_{batch_size}.pth")

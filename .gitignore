@@ -2,6 +2,9 @@
 *.pkl
 **/*.pkl
 
+#Ignore cache files
+models/asc/__pycache__/
+
 #Ignore checkpoint files
 .ipynb_checkpoints/
 
@@ -9,6 +12,7 @@
 *.csv
 *.log
 *.png
+*.pth
 
 #Ignore data folder
 data/
@@ -26,7 +30,3 @@ runs/
 #Ignore pictures
 models/asc/files/
 models/asc/large_model_files
-
-#Ignore large file
-models/TAU2019_autoenc/autoenc_model/tau2019_events_panns_tSNE_plotting_.ipynb
-models/TAU2019_autoenc/autoenc_model/tau2019_kmeans_clustering.ipynb
