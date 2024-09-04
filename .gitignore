@@ -2,6 +2,9 @@
 *.pkl
 **/*.pkl
 
+#Ignore cache files
+models/asc/__pycache__/
+
 #Ignore checkpoint files
 .ipynb_checkpoints/
 
