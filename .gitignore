@@ -4,6 +4,8 @@
 
 #Ignore cache files
 models/asc/__pycache__/
+models/TAU2019_autoenc/autoenc_model/__pycache__/
+models/dataset_prep/__pycache__/
 
 #Ignore checkpoint files
 .ipynb_checkpoints/
