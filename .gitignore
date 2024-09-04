@@ -29,5 +29,5 @@ models/asc/files/
 models/asc/large_model_files
 
 #Ignore large file
-models/TAU2019_autoenc/autoenc_model/tau2019_events_panns_tSNE_plotting_.ipynb
+# models/TAU2019_autoenc/autoenc_model/tau2019_events_panns_tSNE_plotting_.ipynb
 models/TAU2019_autoenc/autoenc_model/tau2019_kmeans_clustering.ipynb
