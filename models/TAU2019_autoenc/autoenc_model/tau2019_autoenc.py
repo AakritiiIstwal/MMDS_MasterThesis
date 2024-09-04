@@ -32,72 +32,72 @@ def tensorStacker(feature_dir):
         return torch.empty((0, 0))
 
 
-# class ConvAutoencoder(nn.Module):
-#     def __init__(self):
-#         super(ConvAutoencoder, self).__init__()
-#         # Encoder layers
-#         self.encoder = nn.Sequential(
-#             nn.Conv2d(1, 16, kernel_size=3, stride=2, padding=1),  # Output: (16, 20, 751)
-#             nn.LeakyReLU(),
-#             nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1), # Output: (32, 10, 376)
-#             nn.LeakyReLU(),
-#             nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1), # Output: [64, 80, 8]
-#             nn.LeakyReLU()
-#         )
-#         # Decoder layers
-#         self.decoder = nn.Sequential(
-#             nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),  # Output: (32, 10, 376)
-#             nn.LeakyReLU(),
-#             nn.ConvTranspose2d(32, 16, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),  # Output: (16, 20, 751)
-#             nn.LeakyReLU(),
-#             nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),    # Adjusted padding
-#             nn.LeakyReLU()
-#         )
-
-#     def forward(self, x):
-#         encoder_x = self.encoder(x)
-#         decoder_x = self.decoder(encoder_x)
-#         return (encoder_x, decoder_x)
-
-
 class ConvAutoencoder(nn.Module):
     def __init__(self):
         super(ConvAutoencoder, self).__init__()
         # Encoder layers
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(1, 16, kernel_size=3, stride=2, padding=1),  # Output: (16, 20, 751)
             nn.LeakyReLU(),
-            nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1), # Output: (32, 10, 376)
             nn.LeakyReLU(),
-            nn.Conv2d(32, 100, kernel_size=3, stride=2, padding=1),
-            nn.LeakyReLU(),
-            nn.Conv2d(100, 10, kernel_size=3, stride=2, padding=1),
-            nn.LeakyReLU(),
+            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1), # Output: [64, 80, 8]
+            nn.LeakyReLU()
         )
         # Decoder layers
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(
-                10, 100, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
-            ),
+            nn.ConvTranspose2d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),  # Output: (32, 10, 376)
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(
-                100, 32, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
-            ),
+            nn.ConvTranspose2d(32, 16, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),  # Output: (16, 20, 751)
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(
-                32, 16, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
-            ),
-            nn.LeakyReLU(),
-            nn.ConvTranspose2d(
-                16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
-            ),
-            nn.LeakyReLU(),
+            nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)),    # Adjusted padding
+            nn.LeakyReLU()
         )
 
     def forward(self, x):
         encoder_x = self.encoder(x)
         decoder_x = self.decoder(encoder_x)
         return (encoder_x, decoder_x)
+
+
+# class ConvAutoencoder(nn.Module):
+#     def __init__(self):
+#         super(ConvAutoencoder, self).__init__()
+#         # Encoder layers
+#         self.encoder = nn.Sequential(
+#             nn.Conv2d(1, 16, kernel_size=3, stride=2, padding=1),
+#             nn.LeakyReLU(),
+#             nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),
+#             nn.LeakyReLU(),
+#             nn.Conv2d(32, 100, kernel_size=3, stride=2, padding=1),
+#             nn.LeakyReLU(),
+#             nn.Conv2d(100, 10, kernel_size=3, stride=2, padding=1),
+#             nn.LeakyReLU(),
+#         )
+#         # Decoder layers
+#         self.decoder = nn.Sequential(
+#             nn.ConvTranspose2d(
+#                 10, 100, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+#             ),
+#             nn.LeakyReLU(),
+#             nn.ConvTranspose2d(
+#                 100, 32, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+#             ),
+#             nn.LeakyReLU(),
+#             nn.ConvTranspose2d(
+#                 32, 16, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+#             ),
+#             nn.LeakyReLU(),
+#             nn.ConvTranspose2d(
+#                 16, 1, kernel_size=3, stride=2, padding=1, output_padding=(1, 1)
+#             ),
+#             nn.LeakyReLU(),
+#         )
+
+#     def forward(self, x):
+#         encoder_x = self.encoder(x)
+#         decoder_x = self.decoder(encoder_x)
+#         return (encoder_x, decoder_x)
 
 
 def main():
@@ -167,7 +167,7 @@ def main():
     # Save the model
     torch.save(
         model.state_dict(),
-        f"/work/aistwal/MMDS_MasterThesis/models/checkpoints/tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth",
+        f"/work/aistwal/backup/MMDS_MasterThesis/models/checkpoints/tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth",
     )
     writer.flush()
     print(f"Model saved to tau_2019_conv_autoencoder_{num_epochs}_{batch_size}.pth")
