@@ -4,4 +4,4 @@
 ## :open_file_folder: Folder contents:
   1. `audio_processing`: This directory includes Python scripts for extracting PANNS inferences and log-mel spectrograms from .wav audio files.
   2. `csv_parser`: This directory contains Jupyter notebooks for general analysis based on the <span style="color:green;">scapper</span> and <span style="color:green;">tut18</span> datasets. The notebooks are designed to explore the distribution of events across various acoustic scenes.
-  3. "models" has code setup for two types of models: Autoencoder(TAU2019_autoenc) and Acoustic Scene Classification(asc).
+  3. `models`: This directory has code setup for two models: Autoencoder(TAU2019_autoenc) and Acoustic Scene Classification(ASC).
