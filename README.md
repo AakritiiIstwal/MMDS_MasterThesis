@@ -1,5 +1,5 @@
 # MMDS_MasterThesis
-:butterfly: This repository maintains the code for Master Thesis at Universität Mannheim. The thesis is conducted under the chair of Artificial Intelligence and focuses on audio processing. The aim of the thesis is to observe the interdependency between acoustic scene classification and acoustic event classification tasks. Both these tasks have been primarily observed separately but it is intuitive that one relies on the other.
+:butterfly: This repository maintains the code for Master Thesis at Universität Mannheim. The thesis is conducted under the chair of Artificial Intelligence and focuses on audio processing. The aim of the thesis is to observe the interdependency between acoustic scenes and events while utilising the power of explainable AI (XAI) on the task of acoustic scene classification (ASC).
 
 ## :open_file_folder: Folder contents:
   1. "audio_processing" contains python scripts for extracting panns inference from audio ".wav" files and log mel extraction script.
